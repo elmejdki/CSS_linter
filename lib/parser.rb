@@ -14,14 +14,14 @@ class Parser
     while @index < @file.length
       @index += 1 if @file[@index].empty?
 
-      while /^\s*$/ === @file[@index]
+      while /^\s*$/ === @file[@index] && @index < @file.length
         @error_output << "line:#{@index + 1} x Unexpected empty line, expected only one empty line"
         @index += 1
       end
 
       check_selector()
 
-      break
+      @index += 1
     end
   end
 
