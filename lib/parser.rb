@@ -21,16 +21,33 @@ class Parser
 
       unless is_selector?(@file[@index])
         self.check_for_selector()
-        index += 1
+        @index += 1
       end
 
       # check for declaration
-      # missing space after colon
-      # missing semi-colon
-      # Unexpected whitespace end line
+      while !@file[@index].include?('}') && @index < @file.length
+        unless /^\s*\s*(\w+(-?\w+){0,3}):\s\S[\s\S]+\S;$/ === @file[@index]
+          if /^\s*(\w+(-?\w+){0,3}):\S[\s\S]+\S;?\s*$/ === @file[@index]
+            @error_output << "line:#{@index + 1} x Missing space after colon in declaration"
+          end
 
-      # valid_selector and invalid_selector
+          if /^\s*(\w+(-?\w+){0,3}):\s{2,}\S[\s\S]+\S;?\s*$/ === @file[@index]
+            @error_output << "line:#{@index + 1} x Unexpected whitespace after colon, expected only one space"
+          end
 
+          if /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+(\w|"|')\s*$/ === @file[@index]
+            @error_output << "line:#{@index + 1} x Missing simi-colon at the end of the declaration"
+          end
+
+          if /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+\S;\s+$/ === @file[@index]
+            @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line"
+          end
+        end
+        
+        @index += 1
+      end
+
+      break
     end
   end
 

@@ -1,6 +1,11 @@
 
 
 
+body {
+  font-family:'Roboto Condensed', sans-serif;
+  background-color: #f4f5f6;
+}
+
 li?<>+ {
 header:hover > div{    
 body{
@@ -11,10 +16,6 @@ body{
   box-sizing: border-box;
 }
 
-body{
-  font-family: 'Roboto Condensed', sans-serif;
-  background-color: #f4f5f6;
-}
 
 li?<>+ {
   width: 30px
