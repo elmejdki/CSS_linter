@@ -19,89 +19,128 @@ class Parser
         @index += 1
       end
 
-      unless is_selector?(@file[@index])
-        self.check_for_selector()
-        @index += 1
-      end
-
-      # check for declaration
-      while !@file[@index].include?('}') && @index < @file.length
-        unless /^\s*\s*(\w+(-?\w+){0,3}):\s\S[\s\S]+\S;$/ === @file[@index]
-          if /^\s*(\w+(-?\w+){0,3}):\S[\s\S]+\S;?\s*$/ === @file[@index]
-            @error_output << "line:#{@index + 1} x Missing space after colon in declaration"
-          end
-
-          if /^\s*(\w+(-?\w+){0,3}):\s{2,}\S[\s\S]+\S;?\s*$/ === @file[@index]
-            @error_output << "line:#{@index + 1} x Unexpected whitespace after colon, expected only one space"
-          end
-
-          if /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+(\w|"|')\s*$/ === @file[@index]
-            @error_output << "line:#{@index + 1} x Missing simi-colon at the end of the declaration"
-          end
-
-          if /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+\S;\s+$/ === @file[@index]
-            @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line"
-          end
-        end
-        
-        @index += 1
-      end
+      check_selector()
 
       break
     end
   end
 
-  def is_selector?(text)
-    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\w+))(:\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s\{$/ === text
+  def whitespace_declaration_end_line?
+    validator = /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+\S;\s+$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line of the declaration" if validator
+
+    validator
   end
 
-  def is_whitespace_colon?(text)
-    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s+\w+))(:\s+\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s*\{\s*$/ === @text
+  def missing_semi_colon?
+    validator = /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+(\w|"|')\s*$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Missing simi-colon at the end of the declaration" if validator
+
+    validator
   end
 
-  def missing_space_before_brac?(text)
-    /^\S[\S\s]+\S\{\s*$/ === text
+  def whitespace_after_colon?
+    validator = /^\s*(\w+(-?\w+){0,3}):\s{2,}\S[\s\S]+\S;?\s*$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Unexpected whitespace after colon in declaration, expected only one space" if validator
+
+    validator
   end
 
-  def whitespace_after_brac?(text)
-    /^\S[\S\s]+\S\s?\{\s+$/ === text
+  def missing_space_after_colon?
+    validator = /^\s*(\w+(-?\w+){0,3}):\S[\s\S]+\S;?\s*$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Missing space after colon in declaration" if validator
+    
+    validator
   end
 
-  def whitespace_end_line?(text)
-    /^\S[\S\s]+\S\s+$/ === text
+  def is_declaration?
+    /^\s*(\w+(-?\w+){0,3}):\s{2,}\S[\s\S]+\S;?\s*$/ === @file[@index]
   end
 
-  def extras_whitespace_before_brac?(text)
-    /^\S[\S\s]+\S\s{2,}\{$/ === text
+  def is_whitespace_colon?
+    validator = /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s+\w+))(:\s+\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s*\{\s*$/ === @text
+
+    @error_output << "line:#{@index + 1} x Unexpected whitespace in pseudo-class after colon" if validator
+
+    validator
   end
 
-  def is_invalid?(text)
-    /^(\S)+\s\{$/ === text
+  def missing_space_before_brac?
+    validator = /^\S[\S\s]+\S\{\s*$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Expected one space before '{'" if validator
+
+    validator
   end
 
-  def check_for_selector
-    if is_whitespace_colon?(@file[@index])
-      @error_output << "line:#{@index + 1} x Unexpected whitespace in pseudo-class after colon"
+  def whitespace_after_brac?
+    validator = /^\S[\S\s]+\S\s?\{\s+$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Expected new line after '{'" if validator
+
+    validator
+  end
+
+  def whitespace_end_line?
+    validator = /^\S[\S\s]+\S\s+$/ === @file[@index]
+    
+    @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line" if validator
+
+    validator
+  end
+
+  def extras_whitespace_before_brac?
+    validator = /^\S[\S\s]+\S\s{2,}\{$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Unexpected whitespace before '{' only one space is allowed" if validator
+
+    validator
+  end
+
+  def is_invalid?
+    validator = /^(\S)+\s\{$/ === @file[@index]
+    
+    @error_output << "line:#{@index + 1} x Invalide selector go learn some CSS bro O.o" if validator
+
+    validator
+  end
+
+  def unknown_word?
+    /^[\s\w]+$/ === @file[@index]
+  end
+
+  def check_declations
+    while !@file[@index].include?('}') && @index < @file.length
+      if is_declaration?
+        missing_space_after_colon?()
+        whitespace_after_colon?()
+        missing_semi_colon?()
+        whitespace_declaration_end_line?()
+      elsif unknown_word?
+        @error_output << "line:#{@index + 1} x Unknown word"
+      end
+      
+      @index += 1
     end
+  end
 
-    if missing_space_before_brac?(@file[@index])
-      @error_output << "line:#{@index + 1} x Expected one space before '{'"
-    end
+  def check_selector
+    if /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\w+))(:\w+)?(\s?(>|,|\+|~)\s?)?(\*\s)?)+)\s?\{$/ === @file[@index]
+      is_whitespace_colon?()
+      missing_space_before_brac?()
+      whitespace_after_brac?()
+      whitespace_end_line?()
+      extras_whitespace_before_brac?()
+      is_invalid?()
 
-    if whitespace_after_brac?(@file[@index])
-      @error_output << "line:#{@index + 1} x Expected new line after '{'"
-    end
+      @index += 1
 
-    if whitespace_end_line?(@file[@index])
-      @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line"
-    end
-
-    if extras_whitespace_before_brac?(@file[@index])
-      @error_output << "line:#{@index + 1} x Unexpected whitespace before '{' only one space is allowed"
-    end
-
-    if is_invalid?(@file[@index])
-      @error_output << "line:#{@index + 1} x Invalide selector go learn some CSS bro O.o"
+      check_declations()
+      # check_selector_end()
     end
   end
 
