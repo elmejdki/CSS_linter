@@ -12,7 +12,6 @@ end
 file = File.open(file_name)
 file_data = file.readlines.map(&:chomp)
 file.close
-# puts file_data.inspect
 
 parser = Parser.new(file_data)
 parser.lunch_linter
