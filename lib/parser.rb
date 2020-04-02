@@ -108,9 +108,29 @@ class Parser
   def is_invalid?
     validator = /^(\S)+\s\{$/ === @file[@index]
     
-    @error_output << "line:#{@index + 1} x Invalide selector go learn some CSS bro O.o" if validator
+    @error_output << "line:#{@index + 1} x Invalid selector go learn some CSS bro O.o" if validator
 
     validator
+  end
+
+  def whitespace_after_end_brac?
+    validator = /^\s*}\s+$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Unexpected space after '}'" if validator
+
+    validator
+  end
+
+  def whitespace_before_end_brac?
+    validator = /^\s+}\s*$/ === @file[@index]
+
+    @error_output << "line:#{@index + 1} x Unexpected space before '}'" if validator
+
+    validator
+  end
+
+  def is_end_selector?
+    /^\s*}\s*$/ === @file[@index]
   end
 
   def unknown_word?
@@ -124,7 +144,7 @@ class Parser
         whitespace_after_colon?()
         missing_semi_colon?()
         whitespace_declaration_end_line?()
-      elsif unknown_word?
+      elsif unknown_word?()
         @error_output << "line:#{@index + 1} x Unknown word"
       end
 
@@ -133,15 +153,10 @@ class Parser
   end
 
   def check_selector_end
-    if /^\s*}\s*$/ === @file[@index]
-      if /^\s*}\s+$/ === @file[@index]
-        @error_output << "line:#{@index + 1} x Unexpected space after '}'"
-      end
-
-      if /^\s+}\s*$/ === @file[@index]
-        @error_output << "line:#{@index + 1} x Unexpected space before '}'"
-      end
-    elsif unknown_word?
+    if is_end_selector?()
+      whitespace_after_end_brac?()
+      whitespace_before_end_brac?()
+    elsif unknown_word?()
       @error_output << "line:#{@index + 1} x Unknown word"
     end
 
