@@ -1,0 +1,65 @@
+.jumbotron {
+  max-width: 300px;
+}
+
+.sticky-100-top {
+  position: -webkit-sticky;
+  position: sticky;
+  top: -100%;
+}
+
+.fs-20 {
+  font-size: 20px;
+}
+
+.bg-red {
+  background-color: red;
+  color: white;
+}
+
+.count-link {
+  width: 70px;
+  height: 52px;
+  line-height: 60px;
+  padding-left: 28px;
+  display: block;
+  background: url(https://g.newsweek.com/themes/newsweek/images/icon-slideshows-nw.png) 0 0/contain no-repeat;
+}
+
+.subscribe {
+  background-color: #f4f5f6;
+}
+
+.subscribe .body {
+  margin-left: 3rem;
+}
+
+.subscribe .image {
+  position: relative;
+  width: 260px;
+  height: 237px;
+  padding-right: 90px;
+}
+
+footer {
+  background-color: white;
+}
+
+.footer-title .brand svg {
+  fill: red;
+  width: 236;
+  height: 36px;
+}
+
+footer .fab {
+  font-size: 24px;
+}
+
+footer .fab:hover {
+  cursor: pointer;
+  color: black;
+}
+
+.to-black:hover {
+  color: black;
+}
