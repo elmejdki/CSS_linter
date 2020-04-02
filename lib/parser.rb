@@ -19,14 +19,73 @@ class Parser
         @index += 1
       end
 
+      unless is_selector?(@file[@index])
+        if is_whitespace_colon?(@file[@index])
+          @error_output << "line:#{@index + 1} x Unexpected whitespace in pseudo-class after colon"
+        end
+
+        if missing_space_before_brac?(@file[@index])
+          @error_output << "line:#{@index + 1} x Expected one space before '{'"
+        end
+
+        if whitespace_after_brac?(@file[@index])
+          @error_output << "line:#{@index + 1} x Expected new line after '{'"
+        end
+
+        if whitespace_end_line?(@file[@index])
+          @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line"
+        end
+
+        if extras_whitespace_before_brac?(@file[@index])
+          @error_output << "line:#{@index + 1} x Unexpected whitespace before '{' only one space is allowed"
+        end
+
+        if is_invalid?(@file[@index])
+          @error_output << "line:#{@index + 1} x Invalide selector go learn some CSS bro O.o"
+        end
+
+        @index += 1
+      end
+
       break
+
+      # if @now == @next
+      #   # unexpected duplicated lines index and index + 1
+      #   @error_output << "line:#{@index} X Unexpected empty line, expected only one empty line"
+      # end
+
+      # valid_selector and invalid_selector
 
     end
   end
 
-  # def is_selector
-  #   //
-  # end
+  def is_selector?(text)
+    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\w+))(:\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s\{$/ === text
+  end
+
+  def is_whitespace_colon?(text)
+    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s+\w+))(:\s+\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s*\{\s*$/ === @text
+  end
+
+  def missing_space_before_brac?(text)
+    /^\S[\S\s]+\S\{\s*$/ === text
+  end
+
+  def whitespace_after_brac?(text)
+    /^\S[\S\s]+\S\s?\{\s+$/ === text
+  end
+
+  def whitespace_end_line?(text)
+    /^\S[\S\s]+\S\s+$/ === text
+  end
+
+  def extras_whitespace_before_brac?(text)
+    /^\S[\S\s]+\S\s{2,}\{$/ === text
+  end
+
+  def is_invalid?(text)
+    /^(\S)+\s\{$/ === text
+  end
 
   def print_results
     if @error_output.length.zero?
