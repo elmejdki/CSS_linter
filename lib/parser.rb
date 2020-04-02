@@ -13,21 +13,27 @@ class Parser
 
     #FIXME: Add colorize gem to the gemfile and also use it here
     while @index < @file.length
-      @index += 1 if @file[@index].empty?
-
-      while /^\s*$/ === @file[@index] && @index < @file.length
-        @error_output << ("%-11s" % "line: #{@index + 1} ").colorize(:light_black) + "x".colorize(:red) + "  Unexpected empty line, expected only one empty line"
-        @index += 1
-      end
+      handle_empty_lines()
 
       check_selector()
 
+      @index += 1
+
+      break
+    end
+  end
+
+  def handle_empty_lines
+    @index += 1 if @file[@index].empty?
+
+    while /^\s*$/ === @file[@index] && @index < @file.length
+      @error_output << ("%-11s" % "line: #{@index + 1} ").colorize(:light_black) + "x".colorize(:red) + "  Unexpected empty line, expected only one empty line"
       @index += 1
     end
   end
 
   def is_selector?(text)
-    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\w+))(:\w+)?(\s?(>|,|\+|~)\s?)?(\*\s)?)+)\s?\{$/ === text
+    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s*\w+))(:\s*\w+)?(\s?(>|,|\+|~)\s?)?(\*\s)?)+)\s?\{\s*$/ === text
   end
 
   def whitespace_declaration_end_line?(text)
@@ -67,7 +73,7 @@ class Parser
   end
 
   def is_whitespace_colon?(text)
-    validator = /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s+\w+))(:\s+\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s*\{\s*$/ === @text
+    validator = /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s+\w+))(:\s+\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s*\{\s*$/ === text
 
     @error_output << ("%-11s" % "line: #{@index + 1} ").colorize(:light_black) + "x".colorize(:red) + "  Unexpected whitespace in pseudo-class after colon" if validator
 
@@ -171,11 +177,11 @@ class Parser
       whitespace_after_brac?(@file[@index])
       whitespace_end_line?(@file[@index])
       extras_whitespace_before_brac?(@file[@index])
-
+      
       @index += 1
-
+      
       check_declarations()
-
+      
       check_selector_end()
     elsif is_invalid?(@file[@index])
       @index += 1
@@ -187,7 +193,7 @@ class Parser
 
   def print_results
     if @error_output.length.zero?
-      puts "Great Job your code is very clean."
+      puts "Great Job Your Code Is Very Clean.".colorize(:green)
     end
 
     i = 0
