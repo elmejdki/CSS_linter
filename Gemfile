@@ -1,4 +1,4 @@
 source 'https://rubygems.org' do
-  gem 'rubocop'
   gem 'colorize'
+  gem 'rubocop'
 end

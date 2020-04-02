@@ -2,10 +2,10 @@ require './lib/parser'
 
 file_name = ARGV[0]
 
-puts "Please introduce the directory of the file in the Terminal" unless file_name
+puts 'Please introduce the directory of the file in the Terminal' unless file_name
 
-unless File.exists?(file_name)
-  puts "There is no such file"
+unless File.exist?(file_name)
+  puts 'There is no such file'
   exit
 end
 
