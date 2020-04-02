@@ -1,7 +1,5 @@
 require 'colorize'
 class Parser
-  attr_reader :error_output
-
   def initialize(file)
     @file = file
     @index = 0
@@ -11,20 +9,17 @@ class Parser
   def lunch_linter
     count = 0
 
-    #FIXME: Add colorize gem to the gemfile and also use it here
     while @index < @file.length
       handle_empty_lines()
-
+      
       check_selector()
 
       @index += 1
-
-      break
     end
   end
 
   def handle_empty_lines
-    @index += 1 if @file[@index].empty?
+    @index += 1 if /^\s*$/ === @file[@index]
 
     while /^\s*$/ === @file[@index] && @index < @file.length
       @error_output << ("%-11s" % "line: #{@index + 1} ").colorize(:light_black) + "x".colorize(:red) + "  Unexpected empty line, expected only one empty line"
@@ -69,11 +64,11 @@ class Parser
   end
 
   def is_declaration?(text)
-    /^\s*(\w+(-?\w+){0,3}):?\s{0,}\S[\s\S]+\S;?\s*$/ === text
+    /^\s*(\w+(-?\w+){0,3}):\s{0,}\S[\s\S]+\S;?\s*$/ === text
   end
 
   def is_whitespace_colon?(text)
-    validator = /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s+\w+))(:\s+\w+)?(\s(>|,|\+|~)\s)?(\*\s)?)+)\s*\{\s*$/ === text
+    validator = /^[\s\S]+\s*:\s+[\s\S]+$/ === text
 
     @error_output << ("%-11s" % "line: #{@index + 1} ").colorize(:light_black) + "x".colorize(:red) + "  Unexpected whitespace in pseudo-class after colon" if validator
 
@@ -166,8 +161,6 @@ class Parser
     elsif unknown_word?(@file[@index])
       @error_output << ("%-11s" % "line: #{@index + 1} ").colorize(:light_black) + "x".colorize(:red) + "  Unknown word"
     end
-
-    @index += 1
   end
 
   def check_selector
@@ -185,6 +178,10 @@ class Parser
       check_selector_end()
     elsif is_invalid?(@file[@index])
       @index += 1
+      
+      check_declarations()
+
+      check_selector_end()
     elsif unknown_word?(@file[@index])
       @error_output << ("%-11s" % "line: #{@index + 1} ").colorize(:light_black) + "x".colorize(:red) + "  Unknown word"
       @index += 1
@@ -198,7 +195,7 @@ class Parser
 
     i = 0
     while i < @error_output.length
-      puts error_output[i]
+      puts @error_output[i]
       i += 1
     end
   end
