@@ -19,9 +19,15 @@ class Parser
         @index += 1
       end
 
-      self.check_for_selector()
+      unless is_selector?(@file[@index])
+        self.check_for_selector()
+        index += 1
+      end
 
-      break
+      # check for declaration
+      # missing space after colon
+      # missing semi-colon
+      # Unexpected whitespace end line
 
       # valid_selector and invalid_selector
 
@@ -57,32 +63,28 @@ class Parser
   end
 
   def check_for_selector
-    unless is_selector?(@file[@index])
-      if is_whitespace_colon?(@file[@index])
-        @error_output << "line:#{@index + 1} x Unexpected whitespace in pseudo-class after colon"
-      end
+    if is_whitespace_colon?(@file[@index])
+      @error_output << "line:#{@index + 1} x Unexpected whitespace in pseudo-class after colon"
+    end
 
-      if missing_space_before_brac?(@file[@index])
-        @error_output << "line:#{@index + 1} x Expected one space before '{'"
-      end
+    if missing_space_before_brac?(@file[@index])
+      @error_output << "line:#{@index + 1} x Expected one space before '{'"
+    end
 
-      if whitespace_after_brac?(@file[@index])
-        @error_output << "line:#{@index + 1} x Expected new line after '{'"
-      end
+    if whitespace_after_brac?(@file[@index])
+      @error_output << "line:#{@index + 1} x Expected new line after '{'"
+    end
 
-      if whitespace_end_line?(@file[@index])
-        @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line"
-      end
+    if whitespace_end_line?(@file[@index])
+      @error_output << "line:#{@index + 1} x Unexpected whitespace at end of line"
+    end
 
-      if extras_whitespace_before_brac?(@file[@index])
-        @error_output << "line:#{@index + 1} x Unexpected whitespace before '{' only one space is allowed"
-      end
+    if extras_whitespace_before_brac?(@file[@index])
+      @error_output << "line:#{@index + 1} x Unexpected whitespace before '{' only one space is allowed"
+    end
 
-      if is_invalid?(@file[@index])
-        @error_output << "line:#{@index + 1} x Invalide selector go learn some CSS bro O.o"
-      end
-
-      @index += 1
+    if is_invalid?(@file[@index])
+      @error_output << "line:#{@index + 1} x Invalide selector go learn some CSS bro O.o"
     end
   end
 
