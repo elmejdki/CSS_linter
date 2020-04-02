@@ -25,6 +25,10 @@ class Parser
     end
   end
 
+  def is_selector?
+    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\w+))(:\w+)?(\s?(>|,|\+|~)\s?)?(\*\s)?)+)\s?\{$/ === @file[@index]
+  end
+
   def whitespace_declaration_end_line?
     validator = /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+\S;\s+$/ === @file[@index]
 
@@ -58,7 +62,7 @@ class Parser
   end
 
   def is_declaration?
-    /^\s*(\w+(-?\w+){0,3}):\s{2,}\S[\s\S]+\S;?\s*$/ === @file[@index]
+    /^\s*(\w+(-?\w+){0,3}):?\s{0,}\S[\s\S]+\S;?\s*$/ === @file[@index]
   end
 
   def is_whitespace_colon?
@@ -113,7 +117,7 @@ class Parser
     /^[\s\w]+$/ === @file[@index]
   end
 
-  def check_declations
+  def check_declarations
     while !@file[@index].include?('}') && @index < @file.length
       if is_declaration?
         missing_space_after_colon?()
@@ -123,24 +127,45 @@ class Parser
       elsif unknown_word?
         @error_output << "line:#{@index + 1} x Unknown word"
       end
-      
+
       @index += 1
     end
   end
 
+  def check_selector_end
+    if /^\s*}\s*$/ === @file[@index]
+      if /^\s*}\s+$/ === @file[@index]
+        @error_output << "line:#{@index + 1} x Unexpected space after '}'"
+      end
+
+      if /^\s+}\s*$/ === @file[@index]
+        @error_output << "line:#{@index + 1} x Unexpected space before '}'"
+      end
+    elsif unknown_word?
+      @error_output << "line:#{@index + 1} x Unknown word"
+    end
+
+    @index += 1
+  end
+
   def check_selector
-    if /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\w+))(:\w+)?(\s?(>|,|\+|~)\s?)?(\*\s)?)+)\s?\{$/ === @file[@index]
+    if is_selector?
       is_whitespace_colon?()
       missing_space_before_brac?()
       whitespace_after_brac?()
       whitespace_end_line?()
       extras_whitespace_before_brac?()
-      is_invalid?()
 
       @index += 1
 
-      check_declations()
-      # check_selector_end()
+      check_declarations()
+
+      check_selector_end()
+    elsif is_invalid?()
+      @index += 1
+    elsif unknown_word?
+      @error_output << "line:#{@index + 1} x Unknown word"
+      @index += 1
     end
   end
 
