@@ -116,7 +116,7 @@ class Parser
   def whitespace_after_end_brac?
     validator = /^\s*}\s+$/ === @file[@index]
 
-    @error_output << "line:#{@index + 1} x Unexpected space after '}'" if validator
+    @error_output << "line:#{@index + 1} x Unexpected whitespace after '}'" if validator
 
     validator
   end
@@ -124,7 +124,7 @@ class Parser
   def whitespace_before_end_brac?
     validator = /^\s+}\s*$/ === @file[@index]
 
-    @error_output << "line:#{@index + 1} x Unexpected space before '}'" if validator
+    @error_output << "line:#{@index + 1} x Unexpected whitespace before '}'" if validator
 
     validator
   end
