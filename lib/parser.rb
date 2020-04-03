@@ -1,15 +1,12 @@
 require 'colorize'
+require './lib/file_opener'
 # rubocop:disable Layout/LineLength
 # rubocop:disable Style/CaseEquality
 class Parser
   attr_reader :error_output
 
-  def initialize(file_name)
-    file_opener = File.open(file_name)
-    file_data = file_opener.readlines.map(&:chomp)
-    file_opener.close
-
-    @file = file_data
+  def initialize(file_path)
+    @file = FILE_OPENER::open_file(file_path)
     @index = 0
     @error_output = []
   end
@@ -122,7 +119,7 @@ class Parser
   end
 
   def invalid?(text)
-    validator = /^(\S)+\s\{$/ === text
+    validator = /^\s*(\S)+\s\{$/ === text
 
     @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Invalid selector go learn some CSS bro O.o' if validator
 
