@@ -40,7 +40,7 @@ class Parser
   def whitespace_declaration_end_line?(text)
     validator = /^\s*(\w+(-?\w+){0,3}):\s*\S[\s\S]+\S;\s+$/ === text
 
-    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace at end of line of the declaration' if validator
+    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace at end of the line of the declaration' if validator
 
     validator
   end
@@ -56,7 +56,7 @@ class Parser
   def whitespace_after_colon?(text)
     validator = /^\s*(\w+(-?\w+){0,3}):\s{2,}\S[\s\S]+\S;?\s*$/ === text
 
-    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace after colon in declaration, expected only one space' if validator
+    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace after the colon in the declaration, expected only one space' if validator
 
     validator
   end
@@ -64,7 +64,7 @@ class Parser
   def missing_space_after_colon?(text)
     validator = /^\s*(\w+(-?\w+){0,3}):\S[\s\S]+\S;?\s*$/ === text
 
-    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Missing space after colon in declaration' if validator
+    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Missing space after the colon in the declaration' if validator
 
     validator
   end
@@ -76,7 +76,7 @@ class Parser
   def whitespace_colon?(text)
     validator = /^[\s\S]+\s*:\s+[\s\S]+$/ === text
 
-    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace in pseudo-class after colon' if validator
+    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace in pseudo-class after the colon' if validator
 
     validator
   end
