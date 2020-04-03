@@ -6,7 +6,7 @@ class Parser
   attr_reader :error_output
 
   def initialize(file_path)
-    @file = FILE_OPENER::open_file(file_path)
+    @file = FileOpener.open_file(file_path)
     @index = 0
     @error_output = []
   end
