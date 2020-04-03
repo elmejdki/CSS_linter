@@ -4,7 +4,7 @@
 
 ## Preview
 
-![invalid css errors](./invalid css test.png)
+![invalid css errors](./invalid_css_test.png)
 
 ## How it works
 
@@ -37,21 +37,21 @@ so as I mentioned earlier the CSS file you can put it where ever you want but wi
 
 #### File:
 
-![invalid css file](./invalid css file.png)
+![invalid css file](./invalid_css_file.png)
 
 #### Output:
 
-![invalid css output](./invalid css test.png)
+![invalid css output](./invalid_css_test.png)
 
 ### For a valid CSS file
 
 #### File:
 
-![valid css file](./validcss file.png)
+![valid css file](./valid_css_file.png)
 
 #### output:
 
-![valid css output](./valid css test.png)
+![valid css output](./valid_css_test.png)
 
 ## How To run the Linter
 
