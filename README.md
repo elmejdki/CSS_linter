@@ -1,6 +1,6 @@
 # CSS Linter
 
-> this a ruby based linter for CSS files. it provides feedback about syntax errors in CSS files. I was inspired by Stylelint that's why you will find that the output is a bit similar and maybe the shows of colors to
+> this a ruby based linter for CSS files. it provides feedback about syntax errors in CSS files. I would like to mention that I was inspired by Stylelint, that's why you will find that the output is a bit similar and maybe the choice of colors to.
 
 ## Preview
 
