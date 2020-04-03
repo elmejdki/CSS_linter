@@ -9,10 +9,6 @@ unless File.exist?(file_name)
   exit
 end
 
-file = File.open(file_name)
-file_data = file.readlines.map(&:chomp)
-file.close
-
-parser = Parser.new(file_data)
+parser = Parser.new(file_name)
 parser.lunch_linter
 parser.print_results

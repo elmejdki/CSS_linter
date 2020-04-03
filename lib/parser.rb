@@ -2,8 +2,14 @@ require 'colorize'
 # rubocop:disable Layout/LineLength
 # rubocop:disable Style/CaseEquality
 class Parser
-  def initialize(file)
-    @file = file
+  attr_reader :error_output
+
+  def initialize(file_name)
+    file_opener = File.open(file_name)
+    file_data = file_opener.readlines.map(&:chomp)
+    file_opener.close
+
+    @file = file_data
     @index = 0
     @error_output = []
   end
