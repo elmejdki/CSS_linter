@@ -1,11 +1,12 @@
 require './lib/parser'
+require 'colorize'
 
 file_name = ARGV[0]
 
-puts 'Please introduce the directory of the file in the Terminal' unless file_name
+puts 'Please introduce the path of the file in the Terminal'.red unless file_name
 
 unless File.exist?(file_name)
-  puts 'There is no such file'
+  puts 'There is no such file'.red
   exit
 end
 
