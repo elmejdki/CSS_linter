@@ -1,57 +1,88 @@
-# Project Name
+# CSS Linter
 
-> One paragraph statement about the project.
+> this a ruby based linter for CSS files. it provides feedback about syntax errors in CSS files. I was inspired by Stylelint that's why you will find that the output is a bit similar and maybe the shows of colors to
 
-![screenshot](./app_screenshot.png)
+## Preview
 
-Additional description about the project and its features.
+![invalid css errors](./invalid css test.png)
 
-## Built With
+## How it works
 
-- Major languages,
-- frameworks,
-- technologies used
+**This version of the CSS Beginner Linter reads a css file provided in the command line like so:**
 
-## Live Demo
+```
+ruby bin/main.rb styles/style.css
+```
 
-[Live Demo Link](https://livedemo.com)
+This CSS linter will catch and display the following syntax errors in the console if there is any:
 
+- Unknown word
+- Unexpected whitespace before \'}\'
+- Unexpected whitespace after \'}\'
+- Invalid selector go learn some CSS bro O.o
+- Unexpected whitespace before \'{\' only one space is allowed
+- Unexpected whitespace at end of line
+- Expected newline after \'{\'
+- Expected one space before \'{\'
+- Unexpected whitespace in pseudo-class after the colon
+- Missing space after the colon in the declaration
+- Unexpected whitespace after the colon in the declaration, expected only one space
+- Missing simi-colon at the end of the declaration
+- Unexpected whitespace at end of the line of the declaration
+- Unexpected empty line, expected only one empty line
 
-## Getting Started
+so as I mentioned earlier the CSS file you can put it where ever you want but with one condition which you want to target by the command line as I showed you, here is a couple of examples how the linter works:
 
-**This is an example of how you may give instructions on setting up your project locally.**
-**Modify this file to match your project, remove sections that don't apply. For example: delete the testing section if the currect project doesn't require testing.**
+### For an invalid css file
 
+#### File:
 
-To get a local copy up and running follow these simple example steps.
+![invalid css file](./invalid css file.png)
 
-### Prerequisites
+#### Output:
 
-### Setup
+![invalid css output](./invalid css test.png)
 
-### Install
+### For a valid CSS file
 
-### Usage
+#### File:
 
-### Run tests
+![valid css file](./validcss file.png)
 
-### Deployment
+#### output:
 
+![valid css output](./valid css test.png)
 
+## How To run the Linter
+
+First of all, you need to have the linter files on your computer. You can get them either cloning this repository or downloading its contents directly
+
+- To clone the repo, go on the project's [Github page](https://github.com/elmejdki/CSS_linter), click on "Clone or download", copy the contents of the text box, and then run `git clone "repo"` on the command line, where "repo" is the text you just copied.
+- If you want to download it directly instead, go on the project's [Github page](https://github.com/elmejdki/CSS_linter), click on "Clone or download", and then on "Download ZIP". After this, you need to extract the contents of the zip file on your computer.
+
+Once you have the files on your computer, go on the command line and navigate to the linter directory. Once there :
+
+- create you own CSS file inside the project and fell it with whatever content but please be gentile don't write complex CSS selectors otherwise the program will fail.
+- open the terminal window and then type in `bundle install` to install a ruby colorize lib that gives a good looking output.
+- Run the linter directly from the root of the project directory, using the following command `ruby ./bin/main.rb .test/invalid.css` keep in mind that you can change `.test/invalid.css` to the location of the file that you have created.
+
+## Requirements
+
+- Ruby
+- Colorize
+- Rubocop
+
+## Built with
+
+- Ruby
 
 ## Authors
 
-👤 **Author1**
+👤 **Zakariae El Mejdki**
 
-- Github: [@githubhandle](https://github.com/githubhandle)
-- Twitter: [@twitterhandle](https://twitter.com/twitterhandle)
-- Linkedin: [linkedin](https://linkedin.com/linkedinhandle)
-
-👤 **Author2**
-
-- Github: [@githubhandle](https://github.com/githubhandle)
-- Twitter: [@twitterhandle](https://twitter.com/twitterhandle)
-- Linkedin: [linkedin](https://linkedin.com/linkedinhandle)
+- Github: [@elmejdki](https://github.com/elmejdki)
+- Twitter: [@zakariaeelmejdki](https://twitter.com/0ca7848f87ab470)
+- Linkedin: [zakariae el mejdki](https://www.linkedin.com/in/zakariae-el-mejdki-644898139/)
 
 ## 🤝 Contributing
 
@@ -65,9 +96,7 @@ Give a ⭐️ if you like this project!
 
 ## Acknowledgments
 
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc
+​	Hat tip to anyone whose code was used
 
 ## 📝 License
 
