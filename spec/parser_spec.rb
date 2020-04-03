@@ -67,7 +67,7 @@ RSpec.describe Parser do
   end
   # rubocop:enable Metrics/BlockLength
 
-  context 'running selector methods' do
+  context 'running declaration methods' do
     it 'return true if there is a missing space after colon' do
       expect(valid_parser.missing_space_after_colon?('width:23px;')).to eql true
     end
