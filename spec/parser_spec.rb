@@ -64,6 +64,14 @@ RSpec.describe Parser do
     it 'return true if there is no space after colon in pseudo-class' do
       expect(valid_parser.whitespace_colon?('header .nav:hover {')).to eql false
     end
+
+    it 'return true if there is extras space before selector' do
+      expect(valid_parser.extras_space_before_selector?('   header .nav: hover {')).to eql true
+    end
+
+    it 'return true if there is no extras space before selector' do
+      expect(valid_parser.extras_space_before_selector?('header .nav:hover {')).to eql false
+    end
   end
   # rubocop:enable Metrics/BlockLength
 

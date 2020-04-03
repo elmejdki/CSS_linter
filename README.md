@@ -4,7 +4,7 @@
 
 ## Preview
 
-![invalid css errors](./invalid_css_test.png)
+![invalid css errors](./assets/images/invalid_css_test.png)
 
 ## How it works
 
@@ -30,6 +30,7 @@ This CSS linter will catch and display the following syntax errors in the consol
 - Missing simi-colon at the end of the declaration
 - Unexpected whitespace at end of the line of the declaration
 - Unexpected empty line, expected only one empty line
+- Unexpected whitespace before selector
 
 so as I mentioned earlier the CSS file you can put it where ever you want but with one condition which you want to target by the command line as I showed you, here is a couple of examples how the linter works:
 
@@ -37,21 +38,21 @@ so as I mentioned earlier the CSS file you can put it where ever you want but wi
 
 #### File:
 
-![invalid css file](./invalid_css_file.png)
+![invalid css file](./assets/images/invalid_css_file.png)
 
 #### Output:
 
-![invalid css output](./invalid_css_test.png)
+![invalid css output](./assets/images/invalid_css_test.png)
 
 ### For a valid CSS file
 
 #### File:
 
-![valid css file](./valid_css_file.png)
+![valid css file](./assets/images/valid_css_file.png)
 
 #### output:
 
-![valid css output](./valid_css_test.png)
+![valid css output](./assets/images/valid_css_test.png)
 
 ## How To run the Linter
 

@@ -34,7 +34,7 @@ class Parser
   end
 
   def selector?(text)
-    /^((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s*\w+))(:\s*\w+)?(\s?(>|,|\+|~)\s?)?(\*\s)?)+)\s?\{\s*$/ === text
+    /^\s*((((\s?\*|\s?(\.|#)?(\w+(-*_*\w+)?)+)+|(:\s*\w+))(:\s*\w+)?(\s?(>|,|\+|~)\s?)?(\*\s)?)+)\s?\{\s*$/ === text
   end
 
   def whitespace_declaration_end_line?(text)
@@ -82,15 +82,23 @@ class Parser
   end
 
   def missing_space_before_brac?(text)
-    validator = /^\S[\S\s]+\S\{\s*$/ === text
+    validator = /^\s*\S[\S\s]+\S\{\s*$/ === text
 
     @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Expected one space before \'{\'' if validator
 
     validator
   end
 
+  def extras_space_before_selector?(text)
+    validator = /^\s+\S[\S\s]+\S\s*\{\s*$/ === text
+
+    @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace before selector' if validator
+
+    validator
+  end
+
   def whitespace_after_brac?(text)
-    validator = /^\S[\S\s]+\S\s?\{\s+$/ === text
+    validator = /^\s*\S[\S\s]+\S\s?\{\s+$/ === text
 
     @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Expected new line after \'{\'' if validator
 
@@ -98,7 +106,7 @@ class Parser
   end
 
   def whitespace_end_line?(text)
-    validator = /^\S[\S\s]+\S\s+$/ === text
+    validator = /^\s*\S[\S\s]+\S\s+$/ === text
 
     @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace at end of line' if validator
 
@@ -106,7 +114,7 @@ class Parser
   end
 
   def extras_whitespace_before_brac?(text)
-    validator = /^\S[\S\s]+\S\s{2,}\{$/ === text
+    validator = /^\s*\S[\S\s]+\S\s{2,}\{$/ === text
 
     @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected whitespace before \'{\' only one space is allowed' if validator
 
@@ -176,6 +184,7 @@ class Parser
       whitespace_after_brac?(@file[@index])
       whitespace_end_line?(@file[@index])
       extras_whitespace_before_brac?(@file[@index])
+      extras_space_before_selector?(@file[@index])
 
       @index += 1
 
