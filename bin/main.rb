@@ -1,4 +1,4 @@
-require './lib/parser'
+require_relative '../lib/parser'
 require 'colorize'
 
 file_path = ARGV[0]

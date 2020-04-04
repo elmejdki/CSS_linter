@@ -1,4 +1,4 @@
-require './lib/parser'
+require_relative '../lib/parser'
 
 RSpec.describe Parser do
   let(:valid_parser) { Parser.new('tests/valid.css') }
