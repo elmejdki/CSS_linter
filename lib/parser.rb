@@ -21,12 +21,13 @@ class Parser
     end
   end
 
-  def handle_empty_lines
-    @index += 1 if /^\s*$/ === @file[@index]
+  def print_results
+    puts 'Great Job Your Code Is Very Clean.'.colorize(:green) if @error_output.length.zero?
 
-    while /^\s*$/ === @file[@index] && @index < @file.length
-      @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected empty line, expected only one empty line'
-      @index += 1
+    i = 0
+    while i < @error_output.length
+      puts @error_output[i]
+      i += 1
     end
   end
 
@@ -150,6 +151,17 @@ class Parser
     /^[\s\w]+$/ === text
   end
 
+  private
+
+  def handle_empty_lines
+    @index += 1 if /^\s*$/ === @file[@index]
+
+    while /^\s*$/ === @file[@index] && @index < @file.length
+      @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unexpected empty line, expected only one empty line'
+      @index += 1
+    end
+  end
+
   def check_declarations
     while !@file[@index].include?('}') && @index < @file.length
       if declaration?(@file[@index])
@@ -197,16 +209,6 @@ class Parser
     elsif unknown_word?(@file[@index])
       @error_output << format('%-11<line>s', line: "line: #{@index + 1} ").colorize(:light_black) + 'x'.colorize(:red) + '  Unknown word'
       @index += 1
-    end
-  end
-
-  def print_results
-    puts 'Great Job Your Code Is Very Clean.'.colorize(:green) if @error_output.length.zero?
-
-    i = 0
-    while i < @error_output.length
-      puts @error_output[i]
-      i += 1
     end
   end
 end
