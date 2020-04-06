@@ -11,7 +11,7 @@
 **This version of the CSS Beginner Linter reads a css file provided in the command line like so:**
 
 ```
-ruby bin/main.rb styles/style.css
+ruby bin/main.rb tests/invalid.css
 ```
 
 This CSS linter will catch and display the following syntax errors in the console if there is any:
@@ -66,6 +66,10 @@ Once you have the files on your computer, go on the command line and navigate to
 - create you own CSS file inside the project and fell it with whatever content but please be gentile don't write complex CSS selectors otherwise the program will fail.
 - open the terminal window and then type in `bundle install` to install a ruby colorize lib that gives a good looking output.
 - Run the linter directly from the root of the project directory, using the following command `ruby ./bin/main.rb .test/invalid.css` keep in mind that you can change `.test/invalid.css` to the location of the file that you have created.
+
+## How To run the tests
+
+ Any contribution is welcomed in this project, you need only to take on consideration one thing which is to write your own test cases if you added new functionality to the program. so all the test cases were written with RSpec inside `spec/parser_spec.rb` file if you created a new class add another file inside the same folder. and finally, to run the tests you will need to open the terminal and cd into the directory of that project and run the following command: ```rspec```
 
 ## Requirements
 
